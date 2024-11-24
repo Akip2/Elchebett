@@ -26,14 +26,14 @@ function setup(){
     }
   });
 
-  const ground=new Wall(width, 300, "green", true);
+  const ground=new Wall(width, 300, "#404040", true);
   ground.placeDefault(positionEnum.DOWN);
   objects.push(ground);
 
-  let player=new Player("blue");
-  player.placeDefault(positionEnum.CENTER);
+  const player=new Player("blue");
+  player.placeNextToVertical(ground, positionEnum.LEFT_UP);
 
-  let keyboard = new Keyboard(player);
+  const keyboard = new Keyboard(player);
   keyboard.addEvents();
 
   objects.push(player);
@@ -70,6 +70,7 @@ function addCollisionEvents(){
     });
   });
 
+  /*
   Matter.Events.on(engine, 'collisionEnd', function(event) {
     event.pairs.forEach(pair => {
       const bodyA = pair.bodyA;
@@ -86,6 +87,7 @@ function addCollisionEvents(){
       });
     });
   });
+  */
 }
 
 function clearEnv() {  

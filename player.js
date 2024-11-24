@@ -1,7 +1,8 @@
 import Shape from "./objects/shape.js";
 import { Body, Bodies, categoryEnum } from "./global.js";
 
-const speedX=4;
+const maxSpeedX=8;
+const speedX=0.075;
 const jumpForce=-0.05;
 
 class Player extends Shape{
@@ -9,6 +10,10 @@ class Player extends Shape{
         let size=20;
 
         const body=Bodies.circle(0, 0, size, { 
+            friction: 0,         
+            frictionStatic: 0,   
+            frictionAir: 0.015,
+
             collisionFilter: {
                 category: categoryEnum.PLAYER,
             },
@@ -23,11 +28,16 @@ class Player extends Shape{
     }
 
     move(direction){
-        Body.setVelocity(this.body, {x: speedX*direction, y: this.body.velocity.y});
+        let currentSpeed=this.body.velocity.x+speedX*direction;
+        currentSpeed=Math.abs(currentSpeed)>maxSpeedX ? maxSpeedX*direction : currentSpeed;
+
+        Body.setVelocity(this.body, {x: currentSpeed, y: this.body.velocity.y});
     }
 
     jump(){
-        let canJump=(Math.abs(this.body.velocity.y)<=0.1 && this.touchGround);
+        let canJump=(Math.abs(this.body.velocity.y)<=1 && this.touchGround);
+        this.touchGround=false;
+
         console.log(this.touchGround);
 
         if(canJump){
