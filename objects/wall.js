@@ -2,7 +2,7 @@ import Shape from "./shape.js";
 import { Bodies, categoryEnum} from "../global.js";
 
 class Wall extends Shape{
-    constructor(width, height, color, ground=false){
+    constructor(width, height, color, ground=false, x=0, y=0){
         const body=Bodies.rectangle(0, 0, width, height, { 
             isStatic: true,
             collisionFilter: {
@@ -13,7 +13,7 @@ class Wall extends Shape{
             }
         });
 
-        super(body, width, height);
+        super(body, width, height, x, y);
     }
 }
 

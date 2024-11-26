@@ -6,7 +6,7 @@ const speedX=0.075;
 const jumpForce=-0.05;
 
 class Player extends Shape{
-    constructor(color){
+    constructor(color, x=0, y=0){
         let size=20;
 
         const body=Bodies.circle(0, 0, size, { 
@@ -23,7 +23,7 @@ class Player extends Shape{
             }
         });
 
-        super(body, size*2, size*2);
+        super(body, size*2, size*2, x, y);
         this.touchGround=false;
     }
 

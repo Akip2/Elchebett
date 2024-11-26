@@ -1,10 +1,12 @@
 import { width, height, Body, Composite } from "../global.js";
 
 class Shape{
-    constructor(body,w, h){
+    constructor(body,w, h, x=0, y=0){
         this.body=body;
         this.width=w;
         this.height=h;
+
+        this.place(x,y);
     }
 
     place(x, y){
