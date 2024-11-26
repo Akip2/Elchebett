@@ -7,8 +7,8 @@ const Engine = Matter.Engine,
     Body=Matter.Body;
 
 
-const width=2560;
-const height=1440;
+const width=1920;
+const height=1080;
 
 const positionEnum = Object.freeze({
     CENTER: [0,0],
