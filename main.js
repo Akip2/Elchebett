@@ -1,7 +1,7 @@
 import { Engine, Render,Runner,Bodies,Composite, World, width, height, positionEnum, categoryEnum} from "./global.js";
 import Wall from "./objects/wall.js";
-import Player from "./objects/player.js";
-import Keyboard from "./keyboard.js";
+import Player from "/objects/player.js";
+import Keyboard from "/keyboard.js";
 
 let engine, runner, render;
 let objects=[];
