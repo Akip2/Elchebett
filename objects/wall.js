@@ -1,5 +1,5 @@
-import Shape from "./shape.js";
-import { Bodies, categoryEnum} from "../global.js";
+const Shape = require("./shape.js");
+const { Bodies, categoryEnum} = require("../global.js");
 
 class Wall extends Shape{
     constructor(width, height, color, ground=false){

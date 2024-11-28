@@ -1,15 +1,15 @@
-import Shape from "./shape.js";
-import { Body, Bodies, categoryEnum } from "../global.js";
+const Shape =require("./shape.js");
+const { Body, Bodies, categoryEnum } = require("../global.js");
 
 const maxSpeedX=8;
 const speedX=0.075;
 const jumpForce=-0.05;
 
 class Player extends Shape{
-    constructor(color){
+    constructor(color, x=0, y=0){
         let size=20;
 
-        const body=Bodies.circle(0, 0, size, { 
+        const body=Bodies.circle(x, y, size, { 
             friction: 0,         
             frictionStatic: 0,   
             frictionAir: 0.015,
@@ -49,4 +49,4 @@ class Player extends Shape{
     }
 }
 
-export default Player;
+module.exports=Player;

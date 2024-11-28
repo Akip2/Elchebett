@@ -1,4 +1,4 @@
-const Party= require("./party.js");
+const Party=require("./party.js");
 
 class PartyManager{
     constructor(){
@@ -46,4 +46,4 @@ class PartyManager{
     }
 }
 
-module.exports= PartyManager;
+module.exports=PartyManager;

@@ -1,10 +1,11 @@
+const Map= require("./map.js");
+
 class Party{
     constructor(maxPlayer=3){
         this.sockets=[];
         this.map=null;
         this.maxPlayer=maxPlayer;
-
-        console.log("new party");
+        this.updateInterval = setInterval(() =>this.notifyPlayers(), 10);
     }
 
     setMap(map){
@@ -14,9 +15,9 @@ class Party{
     addPlayer(socket){
         this.sockets.push(socket);
 
-        this.sockets.forEach((socket) => {
-            console.log(socket.conn.remoteAddress);
-        })
+        if(this.getPlayerNb()>=2){
+            this.loadMap(new Map([[50, 50], [200, 200]]));
+        }
     }
 
     removePlayer(socket){
@@ -41,8 +42,20 @@ class Party{
     }
 
     loadMap(map){
+        this.map=map;
 
+        this.map.load(this.getPlayerNb());
+
+        this.sockets.forEach((socket) => {
+            socket.emit('loadMap', this.map);
+        })
+    }
+
+    notifyPlayers(){
+        this.sockets.forEach((socket) => {
+            socket.emit('update', this.map);
+        })
     }
 }
 
-module.exports= Party;
+module.exports=Party;
