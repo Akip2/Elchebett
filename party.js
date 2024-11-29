@@ -1,28 +1,26 @@
 const Map= require("./map.js");
 
 class Party{
-    constructor(maxPlayer=3){
+    constructor(maxPlayer=7){
         this.sockets=[];
         this.map=null;
         this.maxPlayer=maxPlayer;
-        this.updateInterval = setInterval(() =>this.notifyPlayers(), 10);
-    }
-
-    setMap(map){
-        this.map=map;
+        //this.updateInterval = setInterval(() =>this.notifyPlayers(), 10);
     }
 
     addPlayer(socket){
         this.sockets.push(socket);
 
         if(this.getPlayerNb()>=2){
-            this.loadMap(new Map([[50, 50], [200, 200]]));
+            this.loadMap(new Map(this.sockets));
         }
     }
 
     removePlayer(socket){
         let index = this.sockets.indexOf(socket);
         this.sockets.splice(index, 1);
+
+        this.map.removePlayer(index);
     }
 
     containsPlayer(socket){
@@ -43,12 +41,16 @@ class Party{
 
     loadMap(map){
         this.map=map;
+        this.map.load();
 
-        this.map.load(this.getPlayerNb());
-
+    
+        /*
         this.sockets.forEach((socket) => {
             socket.emit('loadMap', this.map);
         })
+            */
+        
+        this.updateInterval = setInterval(() =>this.notifyPlayers(), 10);
     }
 
     notifyPlayers(){

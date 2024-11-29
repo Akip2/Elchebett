@@ -17,4 +17,4 @@ class Wall extends Shape{
     }
 }
 
-export default Wall;
+module.exports=Wall;

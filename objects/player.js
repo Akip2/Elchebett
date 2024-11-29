@@ -6,7 +6,7 @@ const speedX=0.075;
 const jumpForce=-0.05;
 
 class Player extends Shape{
-    constructor(color, x=0, y=0){
+    constructor(id, color, x=0, y=0){
         let size=20;
 
         const body=Bodies.circle(x, y, size, { 
@@ -25,6 +25,8 @@ class Player extends Shape{
 
         super(body, size*2, size*2);
         this.touchGround=false;
+        this.color=color;
+        this.id=id;
     }
 
     move(direction){
@@ -46,6 +48,17 @@ class Player extends Shape{
         }
 
         return canJump;
+    }
+
+    serialize(){
+        return {
+            color: this.color,
+            position: this.getPosition(),
+            velocity: this.body.velocity,
+            touchGround: this.touchGround,
+            radius: this.width/2,
+            id: this.id
+        };
     }
 }
 

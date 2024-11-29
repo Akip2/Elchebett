@@ -1,4 +1,4 @@
-import { Engine, Render,Runner,Composite, World, width, height, positionEnum, categoryEnum} from "./global.js";
+import { Engine, Render,Runner,Bodies,Composite, World, width, height, positionEnum, categoryEnum} from "./global.js";
 
 /*
 import Wall from "../server/objects/wall.js";
