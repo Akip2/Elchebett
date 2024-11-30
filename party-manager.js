@@ -44,6 +44,31 @@ class PartyManager{
 
         return freeParty;
     }
+
+    getPlayerPartyIndex(socket){
+        let party=null;
+        let playerFound=false;
+        let i=0;
+        
+        while(!playerFound && i<this.parties.length){
+            party=this.parties[i];
+            if(party.containsPlayer(socket)){
+                playerFound=true;
+            }
+            else{
+                i++;
+            }
+        }
+
+        return i;
+    }
+
+    moveHorizontal(socket, direction){
+        let index=this.getPlayerPartyIndex(socket);
+        let party=this.parties[index];
+
+        party.moveHorizontal(socket, direction);
+    }
 }
 
 module.exports=PartyManager;

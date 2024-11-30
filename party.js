@@ -23,6 +23,10 @@ class Party{
         this.map.removePlayer(index);
     }
 
+    moveHorizontal(socket, direction){
+        this.map.moveHorizontal(socket.id, direction);
+    }
+
     containsPlayer(socket){
         return this.sockets.includes(socket);
     }

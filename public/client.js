@@ -1,5 +1,11 @@
 import canvasManager from "./canvas-manager.js";
 
+const rightKey="ArrowRight";
+const leftKey="ArrowLeft";
+const jumpKey="ArrowUp";
+
+const alreadyPressed=[];
+
 var socket = io();
 
 socket.on('connect', function () {
@@ -15,5 +21,17 @@ socket.on('connect', function () {
         map.playerInfos.forEach((player) =>{
             canvasManager.drawPlayer(player, player.id==id);
         })
+
+        map.objectInfos.forEach((obj) =>{
+            canvasManager.drawObject(obj);
+        })
     });
+});
+
+document.addEventListener("keydown", (event) => {
+    let keyname=event.key;
+
+    if(keyname==rightKey){ 
+        socket.emit('horizontal', 1);
+    }
 });

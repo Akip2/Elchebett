@@ -36,6 +36,10 @@ class Player extends Shape{
         Body.setVelocity(this.body, {x: currentSpeed, y: this.body.velocity.y});
     }
 
+    moveTest(direction){
+        Body.setVelocity(this.body, {x: 25*direction, y: this.body.velocity.y});
+    }
+
     jump(){
         let canJump=(Math.abs(this.body.velocity.y)<=1 && this.touchGround);
         this.touchGround=false;

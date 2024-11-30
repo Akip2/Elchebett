@@ -14,6 +14,18 @@ class Wall extends Shape{
         });
 
         super(body, width, height);
+
+        this.color=color;
+    }
+
+    serialize(){
+        return {
+            type: "rectangle",
+            color: this.color,
+            position: this.getPosition(),
+            width: this.width,
+            height: this.height,
+        };
     }
 }
 
