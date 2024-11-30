@@ -1,12 +1,11 @@
 const { width, height, Body, Composite } = require("../global.js");
 
 class Shape{
-    constructor(body,w, h, x=0, y=0){
+    constructor(body, w, h, color="black"){
         this.body=body;
         this.width=w;
         this.height=h;
-
-        this.place(x,y);
+        this.color=color;
     }
 
     place(x, y){
@@ -68,6 +67,16 @@ class Shape{
 
     addToEnv(world){
         Composite.add(world, this.body);
+    }
+
+    serialize(){
+        return {
+            type: this.type,
+            color: this.color,
+            position: this.getPosition(),
+            width: this.width,
+            height: this.height,
+        };
     }
 }
 

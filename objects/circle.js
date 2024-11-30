@@ -3,13 +3,13 @@ const { Bodies} = require("../global.js");
 
 class Circle extends Shape{
     constructor(radius, color, x=0, y=0,){
-        const body=Bodies.circle(0, 0, radius, { 
+        const body=Bodies.circle(x, y, radius, { 
             render: {
               fillStyle : color
             }
         });
 
-        super(body, radius*2, radius*2, x, y);
+        super(body, radius*2, radius*2,color);
     }
 }
 

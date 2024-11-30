@@ -24,10 +24,10 @@ class Player extends Shape{
             }
         });
 
-        super(body, size*2, size*2, x, y);
+        super(body, size*2, size*2, color);
         this.touchGround=false;
-        this.color=color;
         this.id=id;
+        this.type="player";
 
         this.horizontalInterval=null;
         this.jumpInterval=null;
@@ -73,12 +73,10 @@ class Player extends Shape{
     }
 
     serialize(){
-        return {
-            color: this.color,
-            position: this.getPosition(),
-            radius: this.width/2,
-            id: this.id
-        };
+        let json=super.serialize();
+        json.id=this.id;
+
+        return json;
     }
 }
 

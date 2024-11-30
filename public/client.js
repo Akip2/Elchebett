@@ -30,7 +30,9 @@ socket.on('connect', function () {
         canvasManager.clear();
         canvasManager.setBackground("#4A919E");
 
+        console.log(map);
         map.playerInfos.forEach((player) =>{
+            console.log(player);
             canvasManager.drawPlayer(player, player.id==id);
         })
 
