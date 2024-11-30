@@ -78,7 +78,6 @@ class Map {
 
     getPlayerById(id){
         let player=players[0];
-        console.log(player);
 
         let i=1;
         while(player.id!=id && i<players.length){

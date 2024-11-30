@@ -1,12 +1,24 @@
-import canvasManager from "./canvas-manager.js";
+import CanvasManager from "./canvas-manager.js";
+import PlayerController from "./player-controller.js";
 
-const rightKey="ArrowRight";
-const leftKey="ArrowLeft";
-const jumpKey="ArrowUp";
+function createCanvas(){
+    let canvasContainer=document.getElementById("canvas-container");
 
-const alreadyPressed=[];
+    let canvas = document.createElement('canvas');
+    canvas.id     = "game";
+    canvas.width  = 1920;
+    canvas.height = 1080;
+
+    canvasContainer.append(canvas);
+    return canvas;
+}
+
+
+const canvasManager=new CanvasManager(createCanvas());
 
 var socket = io();
+
+const controller=new PlayerController(socket);
 
 socket.on('connect', function () {
     console.log('Connecté au serveur avec l\'ID :', socket.id);
@@ -26,12 +38,4 @@ socket.on('connect', function () {
             canvasManager.drawObject(obj);
         })
     });
-});
-
-document.addEventListener("keydown", (event) => {
-    let keyname=event.key;
-
-    if(keyname==rightKey){ 
-        socket.emit('horizontal', 1);
-    }
 });

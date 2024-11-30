@@ -1,7 +1,7 @@
 const Map= require("./map.js");
 
 class Party{
-    constructor(maxPlayer=7){
+    constructor(maxPlayer=2){
         this.sockets=[];
         this.map=null;
         this.maxPlayer=maxPlayer;

@@ -33,7 +33,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on("horizontal", function(val){
-        partyManager.moveHorizontal(socket, 1);
+        partyManager.moveHorizontal(socket, val);
     })
 });
 
