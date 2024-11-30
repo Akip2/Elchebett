@@ -1,5 +1,3 @@
-const Matter = require('matter-js');
-
 const Engine = Matter.Engine,
     Render = Matter.Render,
     Runner = Matter.Runner,
@@ -34,7 +32,7 @@ const categoryEnum=Object.freeze({
     GROUND: 0x0004
 });
 
-module.exports={
+export{
     Engine,
     Render,
     Runner,

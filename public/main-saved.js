@@ -1,12 +1,13 @@
 import { Engine, Render,Runner,Bodies,Composite, World, width, height, positionEnum, categoryEnum} from "./global.js";
-import Wall from "./objects/wall.js";
+
+/*
+import Wall from "../server/objects/wall.js";
 import Player from "/objects/player.js";
 import Keyboard from "/keyboard.js";
+*/
 
 let engine, runner, render;
 let objects=[];
-
-const players=[];
 
 const canvasContainer=document.getElementById("canvas-container");
 
@@ -26,6 +27,7 @@ function setup(){
     }
   });
 
+  /*
   const ground=new Wall(width, 300, "#404040", true);
   ground.placeDefault(positionEnum.DOWN);
   objects.push(ground);
@@ -41,6 +43,7 @@ function setup(){
   
   addObjectsToEnv();
   addCollisionEvents();
+  */
 
   Render.run(render);
   Runner.run(runner, engine);

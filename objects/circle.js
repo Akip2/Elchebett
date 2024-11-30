@@ -1,5 +1,5 @@
-import Shape from "./shape.js";
-import { Bodies} from "../global.js";
+const Shape = require("./shape.js");
+const { Bodies} = require("../global.js");
 
 class Circle extends Shape{
     constructor(radius, color, x=0, y=0,){

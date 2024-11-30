@@ -1,27 +1,41 @@
+const Map= require("./map.js");
+
 class Party{
-    constructor(maxPlayer=3){
+    constructor(maxPlayer=2){
         this.sockets=[];
         this.map=null;
         this.maxPlayer=maxPlayer;
-
-        console.log("new party");
-    }
-
-    setMap(map){
-        this.map=map;
+        //this.updateInterval = setInterval(() =>this.notifyPlayers(), 10);
     }
 
     addPlayer(socket){
         this.sockets.push(socket);
 
-        this.sockets.forEach((socket) => {
-            console.log(socket.conn.remoteAddress);
-        })
+        if(this.getPlayerNb()>=2){
+            this.loadMap(new Map(this.sockets));
+        }
     }
 
     removePlayer(socket){
         let index = this.sockets.indexOf(socket);
         this.sockets.splice(index, 1);
+
+        this.map.removePlayer(index);
+    }
+
+    executeOrder(socket, order){
+        switch(order.type){
+            case "horizontal":
+                this.map.moveHorizontal(socket.id, order.direction);
+                break;
+
+            case "jump":
+                this.map.jump(socket.id, order.activate);
+                break;
+            
+            default:
+                console.log("Unknown order");
+        }
     }
 
     containsPlayer(socket){
@@ -41,8 +55,18 @@ class Party{
     }
 
     loadMap(map){
+        this.map=map;
+        this.map.load();
+        
+        clearInterval(this.updateInterval);
+        this.updateInterval = setInterval(() =>this.notifyPlayers(), 10);
+    }
 
+    notifyPlayers(){
+        this.sockets.forEach((socket) => {
+            socket.emit('update', this.map);
+        })
     }
 }
 
-module.exports= Party;
+module.exports=Party;
