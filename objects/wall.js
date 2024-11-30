@@ -1,5 +1,5 @@
-import Shape from "./shape.js";
-import { Bodies, categoryEnum} from "../global.js";
+const Shape = require("./shape.js");
+const { Bodies, categoryEnum} = require("../global.js");
 
 class Wall extends Shape{
     constructor(width, height, color, ground=false){
@@ -14,7 +14,19 @@ class Wall extends Shape{
         });
 
         super(body, width, height);
+
+        this.color=color;
+    }
+
+    serialize(){
+        return {
+            type: "rectangle",
+            color: this.color,
+            position: this.getPosition(),
+            width: this.width,
+            height: this.height,
+        };
     }
 }
 
-export default Wall;
+module.exports=Wall;
