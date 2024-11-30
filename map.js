@@ -1,6 +1,6 @@
 const Player = require("./objects/player.js");
 const Matter = require("matter-js");
-const { width, height, positionEnum } = require("./global.js");
+const { width, height, positionEnum, categoryEnum } = require("./global.js");
 const Wall=require("./objects/wall.js");
 
 const Engine = Matter.Engine,
@@ -9,7 +9,7 @@ const Engine = Matter.Engine,
     Composite = Matter.Composite;
 
 var engine = Engine.create();
-engine.gravity.y = 2.5;
+engine.gravity.y = 3;
 
 var players=[];
 
@@ -19,7 +19,7 @@ var objects=[ground];
 
 var simulation;
 
-const defaultSpawns = [{x:400, y:0}, {x:900, y:0}];
+const defaultSpawns = [{x:400, y:350}, {x:width-400, y:350}];
 
 /**
  * Class containing all objects, and runs the matter js environment
@@ -57,6 +57,23 @@ class Map {
             Composite.add(engine.world, obj.body);
         });
 
+        Matter.Events.on(engine, 'collisionStart', function(event) {
+            event.pairs.forEach(pair => {
+              const bodyA = pair.bodyA;
+              const bodyB = pair.bodyB;
+        
+              players.forEach(player => {
+                if (bodyA === player.body || bodyB === player.body) {
+                  const otherBody = (bodyA === player.body) ? bodyB : bodyA;
+        
+                  if (otherBody.collisionFilter.category === categoryEnum.GROUND) {
+                    player.touchGround = true;
+                  }
+                }
+              });
+            });
+          });
+
         simulation=setInterval(() => {
             Matter.Engine.update(engine, 10);
             this.playerInfos=[];
@@ -73,7 +90,23 @@ class Map {
     }
 
     moveHorizontal(id, direction){
-        this.getPlayerById(id).moveTest(direction);
+        let player=this.getPlayerById(id);
+        if(direction!=0){
+            player.move(direction);
+        }
+        else{
+            player.stopMoving();
+        }
+    }
+
+    jump(id, activate){
+        let player=this.getPlayerById(id);
+        if(activate){
+            player.jump();
+        }
+        else{
+            player.stopJumping();
+        }
     }
 
     getPlayerById(id){

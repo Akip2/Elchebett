@@ -11,6 +11,24 @@ class PlayerController{
         this.addEvents();
     }
 
+    createHorizontalOrder(direction){
+        return {
+            type: "horizontal",
+            direction: direction
+        }
+    }
+
+    createJumpOrder(activate){
+        return {
+            type: "jump",
+            activate: activate
+        }
+    }
+
+    sendPlayerOrder(order){
+        this.socket.emit('player', order);
+    }
+
     addEvents(){
         document.addEventListener("keydown", (event) => {
             let keyname=event.key;
@@ -29,7 +47,10 @@ class PlayerController{
                         direction=-1;
                     }
 
-                    this.socket.emit('horizontal', direction);
+                    this.sendPlayerOrder(this.createHorizontalOrder(direction));
+                }
+                else if(keyname==jumpKey){
+                    this.sendPlayerOrder(this.createJumpOrder(true));
                 }
             }
         });
@@ -41,8 +62,11 @@ class PlayerController{
             if(keyname==this.currentHorizontalKey){
                 console.log("stop");
                 this.currentHorizontalKey=null;
-                this.socket.emit('horizontal', 0);
 
+                this.sendPlayerOrder(this.createHorizontalOrder(0));
+            }
+            else if(keyname==jumpKey){
+                this.sendPlayerOrder(this.createJumpOrder(false));
             }
         });
     }

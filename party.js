@@ -23,8 +23,19 @@ class Party{
         this.map.removePlayer(index);
     }
 
-    moveHorizontal(socket, direction){
-        this.map.moveHorizontal(socket.id, direction);
+    executeOrder(socket, order){
+        switch(order.type){
+            case "horizontal":
+                this.map.moveHorizontal(socket.id, order.direction);
+                break;
+
+            case "jump":
+                this.map.jump(socket.id, order.activate);
+                break;
+            
+            default:
+                console.log("Unknown order");
+        }
     }
 
     containsPlayer(socket){
@@ -46,14 +57,8 @@ class Party{
     loadMap(map){
         this.map=map;
         this.map.load();
-
-    
-        /*
-        this.sockets.forEach((socket) => {
-            socket.emit('loadMap', this.map);
-        })
-            */
         
+        clearInterval(this.updateInterval);
         this.updateInterval = setInterval(() =>this.notifyPlayers(), 10);
     }
 

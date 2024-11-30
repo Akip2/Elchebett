@@ -59,11 +59,11 @@ class Server{
         return i;
     }
 
-    moveHorizontal(socket, direction){
+    sendPlayerOrder(socket, order){
         let index=this.getPlayerPartyIndex(socket);
         let party=this.parties[index];
 
-        party.moveHorizontal(socket, direction);
+        party.executeOrder(socket, order);
     }
 }
 
@@ -95,8 +95,8 @@ io.sockets.on('connection', function (socket) {
         serverObj.removePlayer(socket);
     });
 
-    socket.on("horizontal", function(val){
-        serverObj.moveHorizontal(socket, val);
+    socket.on("player", function(order){
+        serverObj.sendPlayerOrder(socket, order);
     })
 });
 
