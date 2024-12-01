@@ -36,7 +36,7 @@ class CanvasManager{
 
     drawRectangle(rec){
         this.ctx.fillStyle = rec.color;
-        this.ctx.fillRect(rec.position.x-rec.width/2, rec.position.y-rec.height/2, rec.width, rec.height);
+        this.ctx.fillRect(rec.position.x-rec.width, rec.position.y-rec.height, rec.width, rec.height);
     }
 }
 
