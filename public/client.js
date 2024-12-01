@@ -18,6 +18,9 @@ const canvasManager=new CanvasManager(createCanvas());
 
 var socket = io();
 
+var staticObjects=[];
+var backgroundColor="#4A919E";
+
 const controller=new PlayerController(socket);
 
 socket.on('connect', function () {
@@ -25,19 +28,27 @@ socket.on('connect', function () {
 
     const id=socket.id;
 
+    socket.on("load", function(staticDatas){
+        staticObjects=staticDatas.objects;
+    });
 
     socket.on('update', function(map) {
         canvasManager.clear();
-        canvasManager.setBackground("#4A919E");
+        canvasManager.setBackground(backgroundColor);
 
         console.log(map);
-        map.playerInfos.forEach((player) =>{
+
+        staticObjects.forEach((obj) =>{
+            canvasManager.drawObject(obj);
+        });
+
+        map.objects.forEach((obj) =>{
+            canvasManager.drawObject(obj);
+        });
+
+        map.players.forEach((player) =>{
             console.log(player);
             canvasManager.drawPlayer(player, player.id==id);
-        })
-
-        map.objectInfos.forEach((obj) =>{
-            canvasManager.drawObject(obj);
-        })
+        });
     });
 });

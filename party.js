@@ -1,18 +1,19 @@
-const Map= require("./map.js");
+const Environment= require("./environment.js");
+const maps=require("./maps.json");
 
 class Party{
     constructor(maxPlayer=2){
         this.sockets=[];
         this.map=null;
         this.maxPlayer=maxPlayer;
-        //this.updateInterval = setInterval(() =>this.notifyPlayers(), 10);
+        this.env=new Environment();
     }
 
     addPlayer(socket){
         this.sockets.push(socket);
 
-        if(this.getPlayerNb()>=2){
-            this.loadMap(new Map(this.sockets));
+        if(this.getPlayerNb()>=1){
+            this.loadMap(maps[0]);
         }
     }
 
@@ -55,16 +56,16 @@ class Party{
     }
 
     loadMap(map){
-        this.map=map;
-        this.map.load();
-        
+        this.env.load(map);
+
         clearInterval(this.updateInterval);
-        this.updateInterval = setInterval(() =>this.notifyPlayers(), 10);
+        this.notifyPlayers("load", this.env.getStaticDatas());
+        this.updateInterval = setInterval(() =>this.notifyPlayers("update", this.env.serialize()), 10);
     }
 
-    notifyPlayers(){
+    notifyPlayers(msg, data){
         this.sockets.forEach((socket) => {
-            socket.emit('update', this.map);
+            socket.emit(msg, data);
         })
     }
 }
