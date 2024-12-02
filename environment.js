@@ -85,7 +85,10 @@ class Environment {
     }
 
     update(){
-        Matter.Engine.update(engine, 10);
+        const currTime = 0.001 * Date.now();
+        Engine.update(engine, 1000/60, this.lastTime ? currTime / this.lastTime : 1);
+        this.lastTime = currTime;
+        
         this.playerInfos=[];
         this.movingObjects=[];
 
