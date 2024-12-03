@@ -36,8 +36,6 @@ socket.on('connect', function () {
         canvasManager.clear();
         canvasManager.setBackground(backgroundColor);
 
-        console.log(map);
-
         staticObjects.forEach((obj) =>{
             canvasManager.drawObject(obj);
         });
@@ -47,7 +45,6 @@ socket.on('connect', function () {
         });
 
         map.players.forEach((player) =>{
-            console.log(player);
             canvasManager.drawPlayer(player, player.id==id);
         });
     });

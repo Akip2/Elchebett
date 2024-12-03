@@ -1,10 +1,13 @@
 const Environment= require("./environment.js");
 const maps=require("./maps.json");
+const { Player } = require("./objects/player.js");
+
+const colors=["blue", "lime", "cyan", "orange", "yellow"];
 
 class Party{
     constructor(maxPlayer=2){
         this.sockets=[];
-        this.map=null;
+        this.players=[];
         this.maxPlayer=maxPlayer;
         this.env=new Environment();
     }
@@ -12,7 +15,10 @@ class Party{
     addPlayer(socket){
         this.sockets.push(socket);
 
-        if(this.getPlayerNb()>=1){
+        let newPlayer=new Player(socket.id, colors[this.getPlayerNb()-1]);
+        this.players.push(newPlayer);
+
+        if(this.getPlayerNb()>=2){
             this.loadMap(maps[0]);
         }
     }
@@ -24,18 +30,22 @@ class Party{
         this.map.removePlayer(index);
     }
 
-    executeOrder(socket, order){
-        switch(order.type){
-            case "horizontal":
-                this.map.moveHorizontal(socket.id, order.direction);
-                break;
+    sendPlayerOrder(id, order){
+        let player=this.getPlayerById(id);
+        player.executeOrder(order);
+    }
 
-            case "jump":
-                this.map.jump(socket.id, order.activate);
-                break;
-            
-            default:
-                console.log("Unknown order");
+    getPlayerById(id){
+        let i=0;
+        while(this.players[i].id!=id && i<this.players.length){
+            i++;
+        }
+
+        if(i<this.players.length){
+            return this.players[i];
+        }
+        else{
+            return null;
         }
     }
 
@@ -56,7 +66,7 @@ class Party{
     }
 
     loadMap(map){
-        this.env.load(map);
+        this.env.load(map, this.players);
 
         clearInterval(this.updateInterval);
         this.notifyPlayers("load", this.env.getStaticDatas());

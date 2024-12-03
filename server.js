@@ -63,7 +63,7 @@ class Server{
         let index=this.getPlayerPartyIndex(socket);
         let party=this.parties[index];
 
-        party.executeOrder(socket, order);
+        party.sendPlayerOrder(socket.id, order);
     }
 }
 
