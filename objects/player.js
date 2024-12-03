@@ -2,35 +2,49 @@ const Shape =require("./shape.js");
 const { Body, Bodies, categoryEnum } = require("../global.js");
 
 const maxSpeedX=8;
-const speedX=0.25;
-const jumpForce=-0.12;
+const speedX=0.12;
+const jumpForce=-0.08;
+
+const bodyTypeEnum = Object.freeze({
+    CIRCLE: "circle",
+    SQUARE: "square"
+});
 
 class Player extends Shape{
+    constructor(id, color){
+        super(null, 0, 0, color);
 
-    constructor(id, color, x=0, y=0){
-        let size=20;
-
-        const body=Bodies.circle(x, y, size, { 
-            friction: 0,         
-            frictionStatic: 0,  
-            frictionAir: 0.015,
-
-            collisionFilter: {
-                category: categoryEnum.PLAYER,
-            },
-
-            render: {
-              fillStyle : color
-            }
-        });
-
-        super(body, size*2, size*2, color);
         this.touchGround=false;
         this.id=id;
         this.type="player";
 
         this.horizontalInterval=null;
         this.jumpInterval=null;
+    }
+
+    executeOrder(order){
+        switch(order.type){
+            case "horizontal":
+                if(order.direction!=0){
+                    this.move(order.direction);
+                }
+                else{
+                    this.stopMoving();
+                }
+                break;
+
+            case "jump":
+                if(order.activate){
+                    this.jump();
+                }
+                else{
+                    this.stopJumping();
+                }
+                break;
+            
+            default:
+                console.log("Unknown order");
+        }
     }
 
     move(direction){
@@ -72,6 +86,38 @@ class Player extends Shape{
         clearInterval(this.jumpInterval);
     }
 
+    createBody(type="circle", size=40){
+        let newBody;
+
+        switch(type){
+            case bodyTypeEnum.CIRCLE:
+                newBody=Bodies.circle(500, 0, size/2);
+                break;
+            
+            case bodyTypeEnum.SQUARE:
+                newBody=Bodies.rectangle(0, 0, size, size);
+                break;
+            
+            default:
+                console.log("Unknown body type");
+        }
+
+        Body.set(newBody, {
+            friction: 0,         
+            frictionStatic: 0,  
+            frictionAir: 0.015,
+
+            render: {
+              fillStyle : this.color
+            }
+        });
+        
+        Body.setVelocity(newBody, {x: 0, y: 0});
+        this.body=newBody;
+        this.width=size;
+        this.height=size;
+    }
+
     serialize(){
         let json=super.serialize();
         json.id=this.id;
@@ -80,4 +126,7 @@ class Player extends Shape{
     }
 }
 
-module.exports=Player;
+module.exports={
+    Player,
+    bodyTypeEnum
+};

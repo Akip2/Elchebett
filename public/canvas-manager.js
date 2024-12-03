@@ -16,10 +16,12 @@ class CanvasManager{
     }
 
     drawPlayer(player, self=false){
-        this.ctx.fillStyle=self ? "red" : player.color;
+        this.ctx.fillStyle=player.color;//self ? "red" : player.color;
+
+        //console.log(player.position);
 
         this.ctx.beginPath();
-        this.ctx.arc(player.position.x, player.position.y, player.width/2, 0, 2 * Math.PI, false);
+        this.ctx.arc(player.position.x, player.position.y, 20, 0, 2 * Math.PI, false);
         this.ctx.fill();
     }
 
@@ -36,7 +38,7 @@ class CanvasManager{
 
     drawRectangle(rec){
         this.ctx.fillStyle = rec.color;
-        this.ctx.fillRect(rec.position.x-rec.width, rec.position.y-rec.height, rec.width, rec.height);
+        this.ctx.fillRect(rec.position.x-rec.width/2, rec.position.y-rec.height/2, rec.width, rec.height);
     }
 }
 

@@ -7,7 +7,8 @@ const Engine = Matter.Engine,
     Composite = Matter.Composite;
 
 var engine = Engine.create();
-engine.gravity.y = 3;
+engine.gravity.y = 0.5;
+engine.gravity.x = 0;
 
 var players=[];
 var objects=[];
@@ -33,42 +34,32 @@ class Environment {
         return res;
     }
 
-    load(mapObj, sockets) {
-        this.spawnPositions = mapObj.spawnPositions;
-        
+    load(mapObj, playerArray) {
         this.staticObjects=[];
-        mapObj.staticObjects.forEach((json) =>{
+        mapObj.staticObjects.forEach((json) => {
             let obj=this.createObject(json);
+            obj.addToEnv(engine.world);
+            
             this.staticObjects.push(obj.serialize());
-            Composite.add(engine.world, obj.body);
-        })
+        });
 
-        let movingObjects=mapObj.movingObjects;
-        if(movingObjects!==undefined){
-            mapObj.movingObjects.forEach((json) =>{
-                let obj=this.createObject(json);
-                objects.push(obj);
-                Composite.add(engine.world, obj.body);
-            })
-        }
+        for (let i = 0; i < playerArray.length; i++) {
+            let position = mapObj.spawnPositions[i];
 
-        /*
-        for (let i = 0; i < this.ids.length; i++) {
-            let position = this.spawnPositions[i];
-
-            let player = new Player(this.ids[i], "blue", position.x, position.y);
+            let player=playerArray[i];
+            player.createBody();
+            player.place(position.x, position.y);
 
             players.push(player);   
-
-            Composite.add(engine.world, player.body);
+            player.addToEnv(engine.world);
         }
-            */
+
 
         Matter.Events.on(engine, 'collisionStart', function(event) {
             event.pairs.forEach(pair => {
               const bodyA = pair.bodyA;
               const bodyB = pair.bodyB;
-        
+
               players.forEach(player => {
                 if (bodyA === player.body || bodyB === player.body) {
                   const otherBody = (bodyA === player.body) ? bodyB : bodyA;
@@ -99,26 +90,6 @@ class Environment {
         objects.forEach((obj) =>{
             this.movingObjects.push(obj.serialize());
         });
-    }
-
-    moveHorizontal(id, direction){
-        let player=this.getPlayerById(id);
-        if(direction!=0){
-            player.move(direction);
-        }
-        else{
-            player.stopMoving();
-        }
-    }
-
-    jump(id, activate){
-        let player=this.getPlayerById(id);
-        if(activate){
-            player.jump();
-        }
-        else{
-            player.stopJumping();
-        }
     }
 
     getPlayerById(id){

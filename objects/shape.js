@@ -70,14 +70,10 @@ class Shape{
     }
 
     serialize(){
-        let position=this.getPosition();
-        position.x+=this.width/2;
-        position.y+=this.height/2;
-        
         return {
             type: this.type,
             color: this.color,
-            position: position,
+            position: this.getPosition(),
             width: this.width,
             height: this.height,
         };
