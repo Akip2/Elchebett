@@ -1,9 +1,9 @@
 const Shape =require("./shape.js");
 const { Body, Bodies, categoryEnum } = require("../global.js");
 
-const maxSpeedX=8;
+const maxSpeedX=12;
 const speedX=0.12;
-const jumpForce=-0.08;
+const jumpForce=-0.03;
 
 const bodyTypeEnum = Object.freeze({
     CIRCLE: "circle",

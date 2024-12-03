@@ -43,6 +43,14 @@ class Environment {
             this.staticObjects.push(obj.serialize());
         });
 
+        if(mapObj.movingObjects!==undefined){
+            mapObj.movingObjects.forEach((json)=>{
+                let obj=this.createObject(json);
+                obj.addToEnv(engine.world);
+                objects.push(obj);
+            });
+        }
+
         for (let i = 0; i < playerArray.length; i++) {
             let position = mapObj.spawnPositions[i];
 
@@ -53,7 +61,6 @@ class Environment {
             players.push(player);   
             player.addToEnv(engine.world);
         }
-
 
         Matter.Events.on(engine, 'collisionStart', function(event) {
             event.pairs.forEach(pair => {
@@ -77,7 +84,7 @@ class Environment {
 
     update(){
         const currTime = 0.001 * Date.now();
-        Engine.update(engine, 1000/60, this.lastTime ? currTime / this.lastTime : 1);
+        Engine.update(engine, 1000/60);
         this.lastTime = currTime;
         
         this.playerInfos=[];
@@ -92,23 +99,8 @@ class Environment {
         });
     }
 
-    getPlayerById(id){
-        let player=players[0];
-
-        let i=1;
-        while(player.id!=id && i<players.length){
-            player=players[i];
-            i++;
-        }
-
-        return player;
-    }
-
-    removePlayer(index) {
-        this.playerInfos.splice(index, 1);
-
-        const removedBody = players.splice(index, 1)[0].body;
-        Composite.remove(engine.world, removedBody);
+    removePlayer(id) {
+        //TO DO
     }
 
     serialize(){

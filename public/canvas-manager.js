@@ -18,8 +18,6 @@ class CanvasManager{
     drawPlayer(player, self=false){
         this.ctx.fillStyle=player.color;//self ? "red" : player.color;
 
-        //console.log(player.position);
-
         this.ctx.beginPath();
         this.ctx.arc(player.position.x, player.position.y, 20, 0, 2 * Math.PI, false);
         this.ctx.fill();
