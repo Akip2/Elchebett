@@ -1,7 +1,7 @@
-const Player = require("./objects/player.js");
+const Player = require("../shared/objects/player.js");
 const Matter = require("matter-js");
-const { width, height, positionEnum, categoryEnum } = require("./global.js");
-const Wall=require("./objects/wall.js");
+const { width, height, positionEnum, categoryEnum } = require("../shared/global.js");
+const Wall=require("../shared/objects/wall.js");
 
 const Engine = Matter.Engine,
     Composite = Matter.Composite;

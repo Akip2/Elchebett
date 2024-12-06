@@ -79,10 +79,10 @@ var io = require('socket.io').listen(server, {
 });
 
 app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/public/index.html');
+    res.sendFile(path.join(__dirname, '/../client/index.html'));
 });
 
-app.use(express.static(path.join(__dirname+'/public/')));
+app.use(express.static(path.join(__dirname, '/../client/')));
 
 io.sockets.on('connection', function (socket) {
     console.log('Socket connected: ' + socket.conn.remoteAddress);

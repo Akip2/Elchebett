@@ -9,7 +9,6 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.1",
-    "fs": "^0.0.1-security",
     "matter-js": "^0.20.0",
     "socket.io": "^2.5.1"
   },

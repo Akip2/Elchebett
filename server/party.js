@@ -1,6 +1,6 @@
 const Environment= require("./environment.js");
 const maps=require("./maps.json");
-const { Player } = require("./objects/player.js");
+const { Player } = require("../shared/objects/player.js");
 
 const colors=["blue", "lime", "cyan", "orange", "yellow"];
 
