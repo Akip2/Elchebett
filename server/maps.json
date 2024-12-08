@@ -2,6 +2,8 @@
     {
         "title": "Test map",
 
+        "background": "#4A919E",
+
         "spawnPositions": [
             {"x": 20, "y":760},
             {"x": 1900, "y":760},

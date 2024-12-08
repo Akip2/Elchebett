@@ -16,7 +16,7 @@ var objects=[];
 var simulation;
 
 /**
- * Class containing all objects, and runs the matter js environment
+ * Class containing all objects, and runs the matter js environment server-side
  */
 class Environment {
     createObject(json){
@@ -35,6 +35,8 @@ class Environment {
     }
 
     load(mapObj, playerArray) {
+        this.background=mapObj.background;
+
         this.staticObjects=[];
         mapObj.staticObjects.forEach((json) => {
             let obj=this.createObject(json);
@@ -43,14 +45,18 @@ class Environment {
             this.staticObjects.push(obj.serialize());
         });
 
+        this.movingObjects=[];
         if(mapObj.movingObjects!==undefined){
             mapObj.movingObjects.forEach((json)=>{
                 let obj=this.createObject(json);
                 obj.addToEnv(engine.world);
                 objects.push(obj);
+
+                this.movingObjects.push(obj.serialize());
             });
         }
 
+        this.playerInfos=[];
         for (let i = 0; i < playerArray.length; i++) {
             let position = mapObj.spawnPositions[i];
 
@@ -60,6 +66,8 @@ class Environment {
 
             players.push(player);   
             player.addToEnv(engine.world);
+
+            this.playerInfos.push(player.serialize());
         }
 
         Matter.Events.on(engine, 'collisionStart', function(event) {
@@ -79,7 +87,7 @@ class Environment {
             });
           });
 
-        simulation=setInterval(()=>this.update(), 10);
+        //simulation=setInterval(()=>this.update(), 1000);
     }
 
     update(){
@@ -103,16 +111,19 @@ class Environment {
         //TO DO
     }
 
-    serialize(){
+    getMovingObjects(){
         return {
-            objects: this.movingObjects,
+            movingObjects: this.movingObjects,
             players: this.playerInfos
         }
     }
 
-    getStaticDatas(){
+    serialize(){
         return {
-            objects : this.staticObjects
+            background : this.background,
+            staticObjects : this.staticObjects,
+            movingObjects : this.movingObjects,
+            players : this.playerInfos
         };
     }
 }

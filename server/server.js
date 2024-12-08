@@ -83,6 +83,7 @@ app.get('/', function(req, res) {
 });
 
 app.use(express.static(path.join(__dirname, '/../client/')));
+app.use(express.static(path.join(__dirname, '/../shared/')));
 
 io.sockets.on('connection', function (socket) {
     console.log('Socket connected: ' + socket.conn.remoteAddress);

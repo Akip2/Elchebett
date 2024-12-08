@@ -1,5 +1,10 @@
-import CanvasManager from "./canvas-manager.js";
 import PlayerController from "./player-controller.js";
+import GameManager from "./game-manager.js";
+
+var engine, runner, render;
+
+const canvasContainer=document.getElementById("canvas-container");
+console.log(typeof window);
 
 function createCanvas(){
     let canvasContainer=document.getElementById("canvas-container");
@@ -13,25 +18,24 @@ function createCanvas(){
     return canvas;
 }
 
-
-const canvasManager=new CanvasManager(createCanvas());
+createCanvas();
 
 var socket = io();
 
-var staticObjects=[];
-var backgroundColor="#4A919E";
-
 const controller=new PlayerController(socket);
+const gameManager=new GameManager(canvasContainer);
 
 socket.on('connect', function () {
     console.log('Connecté au serveur avec l\'ID :', socket.id);
 
     const id=socket.id;
 
-    socket.on("load", function(staticDatas){
-        staticObjects=staticDatas.objects;
+    socket.on("load", function(json){
+        gameManager.load(json);
+        //staticObjects=staticDatas.objects;
     });
 
+    /*
     socket.on('update', function(map) {
         canvasManager.clear();
         canvasManager.setBackground(backgroundColor);
@@ -48,4 +52,5 @@ socket.on('connect', function () {
             canvasManager.drawPlayer(player, player.id==id);
         });
     });
+    */
 });

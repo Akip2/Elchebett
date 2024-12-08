@@ -1,5 +1,7 @@
-const Shape = require("./shape.js");
-const { Bodies, categoryEnum} = require("../global.js");
+const isServer=typeof window === "undefined";
+
+var Shape = require("./shape.js");
+var { Bodies, categoryEnum} = require("../global.js");
 
 class Wall extends Shape{
     constructor(width, height, color, isGround=false, x=0, y=0){
@@ -14,8 +16,13 @@ class Wall extends Shape{
         });
 
         super(body, width, height, color);
-        this.type="rectangle";
+        this.type="wall";
     }
 }
 
-module.exports=Wall;
+if(isServer){
+    module.exports=Wall;
+}
+else{
+    window.wall=Wall;
+}

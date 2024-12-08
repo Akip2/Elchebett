@@ -69,8 +69,12 @@ class Party{
         this.env.load(map, this.players);
 
         clearInterval(this.updateInterval);
-        this.notifyPlayers("load", this.env.getStaticDatas());
-        this.updateInterval = setInterval(() =>this.notifyPlayers("update", this.env.serialize()), 10);
+        this.notifyPlayers("load", this.env.serialize());
+
+        this.updateInterval = setInterval(() => {
+            this.env.update();
+            this.notifyPlayers("update", this.env.getMovingObjects())
+        }, 1000);
     }
 
     notifyPlayers(msg, data){

@@ -1,11 +1,10 @@
 {
-  "name": "elchebett",
+  "name": "@elchebett/server",
   "version": "1.0.0",
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "matter-js": "^0.20.0",
-    "socket.io": "^2.5.1"
+    "express": "^4.21.1"
   },
   "keywords": [],
   "description": ""
