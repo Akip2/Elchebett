@@ -1,75 +1,78 @@
-const Party=require("./party.js");
-var express = require('express');
+import Party from "./party.js";
+import express from 'express';
+import path from 'path';
+import { dirname } from 'path'; 
+import { fileURLToPath } from 'url';
+import http from "http";
+import Server from "socket.io";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 var app = express();
-var path = require('path');
-var server = require('http').createServer(app);
+var server = http.createServer(app);
 
-class Server{
-    constructor(){
-        this.parties=[];
-    }
+var parties=[];
 
-    addPlayer(socket){
-        let freeParty=this.getFreeParty();
-        freeParty.addPlayer(socket);
-    }
 
-    removePlayer(socket){
-        let index=this.getPlayerPartyIndex(socket);
-        let party=this.parties[index];
-        party.removePlayer(socket);
+function addPlayer(socket){
+    let freeParty=getFreeParty();
+    freeParty.addPlayer(socket);
+}
 
-        if(party.isEmpty()){
-            this.parties.splice(index,1);
-        }
-    }
+function removePlayer(socket){
+    let index=getPlayerPartyIndex(socket);
+    let party=parties[index];
+    party.removePlayer(socket);
 
-    getFreeParty(){
-        let freeParty=null;
-
-        this.parties.forEach((party) => {
-            if(party.isFree() && (freeParty==null || party.getPlayerNb()<freeParty.getPlayerNb())){
-                freeParty=party;
-            }
-        });
-
-        if(freeParty==null){ //no party available, we create a new one
-            freeParty=new Party();
-            this.parties.push(freeParty);
-        }
-
-        return freeParty;
-    }
-
-    getPlayerPartyIndex(socket){
-        let party=null;
-        let playerFound=false;
-        let i=0;
-        
-        while(!playerFound && i<this.parties.length){
-            party=this.parties[i];
-            if(party.containsPlayer(socket)){
-                playerFound=true;
-            }
-            else{
-                i++;
-            }
-        }
-
-        return i;
-    }
-
-    sendPlayerOrder(socket, order){
-        let index=this.getPlayerPartyIndex(socket);
-        let party=this.parties[index];
-
-        party.sendPlayerOrder(socket.id, order);
+    if(party.isEmpty()){
+        parties.splice(index,1);
     }
 }
 
-const serverObj=new Server();
+function getFreeParty(){
+    let freeParty=null;
 
-var io = require('socket.io').listen(server, {
+    parties.forEach((party) => {
+        if(party.isFree() && (freeParty==null || party.getPlayerNb()<freeParty.getPlayerNb())){
+            freeParty=party;
+        }
+    });
+
+    if(freeParty==null){ //no party available, we create a new one
+        freeParty=new Party();
+        parties.push(freeParty);
+    }
+
+    return freeParty;
+}
+
+function getPlayerPartyIndex(socket){
+    let party=null;
+    let playerFound=false;
+    let i=0;
+        
+    while(!playerFound && i<parties.length){
+        party=parties[i];
+        if(party.containsPlayer(socket)){
+            playerFound=true;
+        }
+        else{
+            i++;
+        }
+    }
+
+    return i;
+}
+
+function sendPlayerOrder(socket, order){
+    let index=getPlayerPartyIndex(socket);
+    let party=parties[index];
+
+    party.sendPlayerOrder(socket.id, order);
+}
+
+var io = Server.listen(server, {
     //path: '/test',
     //serveClient: false,
     // below are engine.IO options
@@ -87,17 +90,17 @@ app.use(express.static(path.join(__dirname, '/../shared/')));
 
 io.sockets.on('connection', function (socket) {
     console.log('Socket connected: ' + socket.conn.remoteAddress);
-
-    serverObj.addPlayer(socket);
+    
+    addPlayer(socket);
 
     socket.on('disconnect', function() {
         console.log('Socket disconnected');
 
-        serverObj.removePlayer(socket);
+        removePlayer(socket);
     });
 
     socket.on("player", function(order){
-        serverObj.sendPlayerOrder(socket, order);
+        sendPlayerOrder(socket, order);
     })
 });
 

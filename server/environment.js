@@ -1,7 +1,7 @@
-const Player = require("../shared/objects/player.js");
-const Matter = require("matter-js");
-const { width, height, positionEnum, categoryEnum } = require("../shared/global.js");
-const Wall=require("../shared/objects/wall.js");
+import Player from"../shared/objects/player.js";
+import Matter from "matter-js";
+import { width, height, positionEnum, categoryEnum } from "../shared/global.js";
+import Wall from "../shared/objects/wall.js";
 
 const Engine = Matter.Engine,
     Composite = Matter.Composite;
@@ -128,4 +128,4 @@ class Environment {
     }
 }
 
-module.exports = Environment;
+export default Environment;

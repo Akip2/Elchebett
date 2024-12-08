@@ -1,6 +1,15 @@
-const Environment= require("./environment.js");
-const maps=require("./maps.json");
-const { Player } = require("../shared/objects/player.js");
+import Environment from "./environment.js";
+//import maps from "./maps.json";
+import { Player } from "../shared/objects/player.js";
+
+import { readFile } from 'fs/promises';
+
+
+const maps = JSON.parse(
+  await readFile(
+    new URL('./maps.json', import.meta.url)
+  )
+);
 
 const colors=["blue", "lime", "cyan", "orange", "yellow"];
 
@@ -84,4 +93,4 @@ class Party{
     }
 }
 
-module.exports=Party;
+export default Party;

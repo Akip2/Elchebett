@@ -1,5 +1,5 @@
-const Shape =require("./shape.js");
-const { Body, Bodies, categoryEnum } = require("../global.js");
+import Shape from "./shape.js";
+import { Bodies, Body, categoryEnum} from "../global.js";
 
 const maxSpeedX=12;
 const speedX=0.12;
@@ -126,7 +126,9 @@ class Player extends Shape{
     }
 }
 
-module.exports={
+export{
     Player,
     bodyTypeEnum
 };
+
+export default Player;

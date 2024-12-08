@@ -1,4 +1,4 @@
-const { width, height, Body, Composite } = require("../global.js");
+import { width, height, Body, Composite } from "../global.js";
 
 class Shape{
     constructor(body, w, h, color="black"){
@@ -80,4 +80,4 @@ class Shape{
     }
 }
 
-module.exports=Shape;
+export default Shape;

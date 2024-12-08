@@ -1,4 +1,13 @@
-const Matter = require('matter-js');
+const isServer = typeof window === 'undefined';
+
+var Matter;
+if(isServer){
+    const matterModule=await import('matter-js');
+    Matter = matterModule.default;
+}
+else{
+    Matter=window.Matter;
+}
 
 const Engine = Matter.Engine,
     Render = Matter.Render,
@@ -7,7 +16,6 @@ const Engine = Matter.Engine,
     Composite = Matter.Composite,
     World=Matter.World,
     Body=Matter.Body;
-
 
 const width=1920;
 const height=1080;
@@ -34,7 +42,7 @@ const categoryEnum=Object.freeze({
     GROUND: 0x0004
 });
 
-module.exports={
+export{
     Engine,
     Render,
     Runner,

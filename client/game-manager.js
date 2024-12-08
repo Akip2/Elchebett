@@ -30,10 +30,12 @@ class GameManager{
         });
 
         //Adding objects to simulation
+        /*
         json.staticObjects.forEach((jsonObj) =>{
             let obj=this.createObject(jsonObj);
             obj.addToEnv(this.engine.world);
         });
+        */
 
         Matter.Render.run(this.render);
         Matter.Runner.run(this.runner, this.engine);
@@ -51,7 +53,7 @@ class GameManager{
 
         switch(json.type){
             case "wall":
-                res=null;//new Wall(json.width, json.height, json.color, json.isGround, json.position.x, json.position.y);
+                res=new Wall(json.width, json.height, json.color, json.isGround, json.position.x, json.position.y);
                 break;
             
             default:

@@ -1,10 +1,7 @@
 import PlayerController from "./player-controller.js";
 import GameManager from "./game-manager.js";
 
-var engine, runner, render;
-
 const canvasContainer=document.getElementById("canvas-container");
-console.log(typeof window);
 
 function createCanvas(){
     let canvasContainer=document.getElementById("canvas-container");
@@ -32,7 +29,6 @@ socket.on('connect', function () {
 
     socket.on("load", function(json){
         gameManager.load(json);
-        //staticObjects=staticDatas.objects;
     });
 
     /*

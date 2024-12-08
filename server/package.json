@@ -4,8 +4,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "fs": "^0.0.1-security"
   },
   "keywords": [],
-  "description": ""
+  "description": "",
+  "type": "module"
 }

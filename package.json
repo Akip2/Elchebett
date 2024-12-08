@@ -8,5 +8,7 @@
     "socket.io": "^2.5.1"
   },
   "keywords": [],
-  "description": ""
+  "description": "",
+
+  "type": "module"
 }
