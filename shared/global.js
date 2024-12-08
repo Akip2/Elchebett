@@ -1,3 +1,5 @@
+import Wall from './objects/wall.js';
+
 const isServer = typeof window === 'undefined';
 
 var Matter;
@@ -42,6 +44,21 @@ const categoryEnum=Object.freeze({
     GROUND: 0x0004
 });
 
+function createObject(json){
+    let res;
+
+    switch(json.type){
+        case "wall":
+            res=new Wall(json.width, json.height, json.color, json.isGround, json.position.x, json.position.y);
+            break;
+        
+        default:
+            console.log("Unknown object type");
+    }
+
+    return res;
+}
+
 export{
     Engine,
     Render,
@@ -53,5 +70,6 @@ export{
     width,
     height,
     positionEnum,
-    categoryEnum
+    categoryEnum,
+    createObject
 }

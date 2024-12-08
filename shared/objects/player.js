@@ -16,7 +16,6 @@ class Player extends Shape{
 
         this.touchGround=false;
         this.id=id;
-        this.type="player";
 
         this.horizontalInterval=null;
         this.jumpInterval=null;
@@ -91,7 +90,7 @@ class Player extends Shape{
 
         switch(type){
             case bodyTypeEnum.CIRCLE:
-                newBody=Bodies.circle(500, 0, size/2);
+                newBody=Bodies.circle(0, 0, size/2);
                 break;
             
             case bodyTypeEnum.SQUARE:
@@ -102,20 +101,16 @@ class Player extends Shape{
                 console.log("Unknown body type");
         }
 
-        Body.set(newBody, {
-            friction: 0,         
-            frictionStatic: 0,  
-            frictionAir: 0.015,
-
-            render: {
-              fillStyle : this.color
-            }
-        });
+        newBody.friction=0;
+        newBody.frictionStatic=0;
+        newBody.frictionAir=0.015;
+        newBody.render.fillStyle=this.color;
         
-        Body.setVelocity(newBody, {x: 0, y: 0});
         this.body=newBody;
+
         this.width=size;
         this.height=size;
+        this.type=type;
     }
 
     serialize(){

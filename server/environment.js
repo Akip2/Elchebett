@@ -1,7 +1,6 @@
-import Player from"../shared/objects/player.js";
 import Matter from "matter-js";
 import { width, height, positionEnum, categoryEnum } from "../shared/global.js";
-import Wall from "../shared/objects/wall.js";
+import { createObject } from "../shared/global.js";
 
 const Engine = Matter.Engine,
     Composite = Matter.Composite;
@@ -19,27 +18,12 @@ var simulation;
  * Class containing all objects, and runs the matter js environment server-side
  */
 class Environment {
-    createObject(json){
-        let res;
-
-        switch(json.type){
-            case "wall":
-                res=new Wall(json.width, json.height, json.color, json.isGround, json.position.x, json.position.y);
-                break;
-            
-            default:
-                console.log("Unknown object type");
-        }
-
-        return res;
-    }
-
     load(mapObj, playerArray) {
         this.background=mapObj.background;
 
         this.staticObjects=[];
         mapObj.staticObjects.forEach((json) => {
-            let obj=this.createObject(json);
+            let obj=createObject(json);
             obj.addToEnv(engine.world);
             
             this.staticObjects.push(obj.serialize());
@@ -48,7 +32,7 @@ class Environment {
         this.movingObjects=[];
         if(mapObj.movingObjects!==undefined){
             mapObj.movingObjects.forEach((json)=>{
-                let obj=this.createObject(json);
+                let obj=createObject(json);
                 obj.addToEnv(engine.world);
                 objects.push(obj);
 

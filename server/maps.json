@@ -25,6 +25,18 @@
                 "width": 1920,
                 "height": 300,
                 "color": "darkslategray"
+            },
+
+            {
+                "type": "wall",
+                "isGround":true,
+                "position" : {
+                    "x":960,
+                    "y": 150
+                },
+                "width": 1920,
+                "height": 300,
+                "color": "darkslategray"
             }
         ]
     }

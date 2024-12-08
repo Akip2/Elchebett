@@ -1,4 +1,5 @@
-import Wall from "./objects/wall.js";
+import { createObject, Composite } from "./global.js";
+import Player from "./objects/player.js";
 
 class GameManager{
     constructor(canvasContainer){
@@ -15,7 +16,7 @@ class GameManager{
         this.canvasContainer.innerHTML="";
 
         this.engine=Matter.Engine.create(); 
-        this.engine.gravity.y=0;
+        this.engine.gravity.y=0.5;
       
         this.runner= Matter.Runner.create(); 
         this.render = Matter.Render.create({
@@ -29,13 +30,23 @@ class GameManager{
           }
         });
 
+
         //Adding objects to simulation
-        /*
         json.staticObjects.forEach((jsonObj) =>{
-            let obj=this.createObject(jsonObj);
+            let obj=createObject(jsonObj);
             obj.addToEnv(this.engine.world);
         });
-        */
+
+        json.players.forEach((jsonPlayer) =>{
+            let player=new Player(jsonPlayer.id, jsonPlayer.color);
+            player.createBody();
+            player.place(jsonPlayer.position.x, jsonPlayer.position.y);
+
+            player.addToEnv(this.engine.world);
+            this.players.push(player);
+        });
+
+        console.log(this.engine.world);
 
         Matter.Render.run(this.render);
         Matter.Runner.run(this.runner, this.engine);
@@ -46,21 +57,6 @@ class GameManager{
     clearGame(){
         //TO DO
         this.isRunning=false;
-    }
-
-    createObject(json){
-        let res;
-
-        switch(json.type){
-            case "wall":
-                res=new Wall(json.width, json.height, json.color, json.isGround, json.position.x, json.position.y);
-                break;
-            
-            default:
-                console.log("Unknown object type");
-        }
-
-        return res;
     }
 }
 
