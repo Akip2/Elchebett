@@ -31,6 +31,10 @@ socket.on('connect', function () {
         gameManager.load(json);
     });
 
+    socket.on("player", function(order){
+        gameManager.sendPlayerOrder(order);
+    });
+
     /*
     socket.on('update', function(map) {
         canvasManager.clear();

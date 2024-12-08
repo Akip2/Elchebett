@@ -42,6 +42,9 @@ class Party{
     sendPlayerOrder(id, order){
         let player=this.getPlayerById(id);
         player.executeOrder(order);
+
+        order.id=id;
+        this.notifyPlayers("player", order)
     }
 
     getPlayerById(id){

@@ -15,6 +15,15 @@ class Wall extends Shape{
 
         super(body, width, height, color);
         this.type="wall";
+        this.isGround=isGround;
+    }
+
+    serialize(){
+        let json=super.serialize();
+
+        json.isGround=this.isGround;
+
+        return json;
     }
 }
 
