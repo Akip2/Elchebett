@@ -65,6 +65,10 @@ class Shape{
         return this.body.position;
     }
 
+    getVelocity(){
+        return this.body.velocity;
+    }
+
     addToEnv(world){
         Composite.add(world, this.body);
     }
@@ -77,6 +81,20 @@ class Shape{
             width: this.width,
             height: this.height,
         };
+    }
+
+    getBodyData(){
+        return {
+            position: this.getPosition(),
+            angle: this.body.angle,
+            velocity: this.getVelocity(),
+        }
+    }
+
+    applyData(data){
+        this.place(data.position.x, data.position.y);
+        Body.setVelocity(this.body, data.velocity);
+        Body.setAngle(this.body, data.angle);
     }
 }
 

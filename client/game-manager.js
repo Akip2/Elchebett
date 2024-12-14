@@ -91,6 +91,20 @@ class GameManager{
             }
         }
     }
+
+    update(json){
+      for(let i=0; i<json.movingObjects.length; i++){
+        let data=json.movingObjects[i];
+        let movingObject=this.movingObjects[i];
+        movingObject.applyData(data);
+      }
+
+      for(let i=0; i<json.players.length; i++){
+        let data=json.players[i];
+        let player=this.players[i];
+        player.applyData(data);
+      }
+    }
 }
 
 export default GameManager;

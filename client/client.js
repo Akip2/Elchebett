@@ -35,22 +35,8 @@ socket.on('connect', function () {
         gameManager.sendPlayerOrder(order);
     });
 
-    /*
-    socket.on('update', function(map) {
-        canvasManager.clear();
-        canvasManager.setBackground(backgroundColor);
-
-        staticObjects.forEach((obj) =>{
-            canvasManager.drawObject(obj);
-        });
-
-        map.objects.forEach((obj) =>{
-            canvasManager.drawObject(obj);
-        });
-
-        map.players.forEach((player) =>{
-            canvasManager.drawPlayer(player, player.id==id);
-        });
+    socket.on('update', function(json) {
+        console.log("updating");
+        gameManager.update(json);
     });
-    */
 });

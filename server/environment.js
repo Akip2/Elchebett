@@ -71,23 +71,24 @@ class Environment {
             });
           });
 
-        //simulation=setInterval(()=>this.update(), 1000);
+          this.updateNumber=0;
+        simulation=setInterval(()=>Engine.update(engine, 1000/60, this.updateNumber*1000), 1);
     }
 
     update(){
         const currTime = 0.001 * Date.now();
-        Engine.update(engine, 1000/60);
+        this.updateNumber++;
         this.lastTime = currTime;
         
         this.playerInfos=[];
         this.movingObjects=[];
 
         players.forEach((player) =>{
-            this.playerInfos.push(player.serialize());
+            this.playerInfos.push(player.getBodyData());
         });
 
         objects.forEach((obj) =>{
-            this.movingObjects.push(obj.serialize());
+            this.movingObjects.push(obj.getBodyData());
         });
     }
 
