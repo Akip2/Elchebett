@@ -17,6 +17,8 @@ class Party{
     constructor(maxPlayer=2){
         this.sockets=[];
         this.players=[];
+        this.latencies=[];
+
         this.maxPlayer=maxPlayer;
         this.env=new Environment();
     }
@@ -27,14 +29,18 @@ class Party{
         let newPlayer=new Player(socket.id, colors[this.getPlayerNb()-1]);
         this.players.push(newPlayer);
 
+        this.latencies.push(0);
+
         if(this.getPlayerNb()>=2){
             this.loadMap(maps[0]);
         }
     }
 
-    removePlayer(socket){
-        let index = this.sockets.indexOf(socket);
+    removePlayer(id){
+        let index = this.getPlayerIndexById(id);
         this.sockets.splice(index, 1);
+        this.players.splice(index, 1);
+        this.latencies.splice(index, 1);
 
         this.map.removePlayer(index);
     }
@@ -61,6 +67,27 @@ class Party{
         }
     }
 
+    getPlayerIndexById(id){
+        let i=0;
+        while(this.players[i].id!=id && i<this.players.length){
+            i++;
+        }
+
+        if(i<this.players.length){
+            return i;
+        }
+        else{
+            return -1;
+        }
+    }
+
+    setLatency(id, latency){
+        let index = this.getPlayerIndexById(id);
+        this.latencies[index] = latency;
+
+        console.log(this.latencies);
+    }
+
     containsPlayer(socket){
         return this.sockets.includes(socket);
     }
@@ -83,16 +110,25 @@ class Party{
         clearInterval(this.updateInterval);
         this.notifyPlayers("load", this.env.serialize());
 
-        this.updateInterval = setInterval(() => {
-            this.env.update();
-            this.notifyPlayers("update", this.env.getMovingObjects())
-        }, 1000);
+
+        clearInterval(this.pingInterval);
+        this.pingInterval = setInterval(() => {
+            this.notifyPlayers("heartbeat", Date.now());
+        }, 1);
     }
 
     notifyPlayers(msg, data){
-        this.sockets.forEach((socket) => {
-            socket.emit(msg, data);
-        })
+        const maxLatency=Math.max(this.latencies);
+        for(let i = 0; i < this.sockets.length; i++){
+            let socket = this.sockets[i];
+            let latency = this.latencies[i];
+
+            let delay = maxLatency-latency;
+
+            setTimeout(() => {
+                socket.emit(msg, data);
+            }, delay);
+        }
     }
 }
 

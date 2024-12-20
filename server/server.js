@@ -102,6 +102,14 @@ io.sockets.on('connection', function (socket) {
     socket.on("player", function(order){
         sendPlayerOrder(socket, order);
     })
+
+    socket.on("callback", function(date){
+        let index = getPlayerPartyIndex(socket);
+        let party = parties[index];
+
+        let latency = (Date.now() - date) / 2
+        party.setLatency(socket.id, latency);
+    });
 });
 
 server.listen(8001, function () {

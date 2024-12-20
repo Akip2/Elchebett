@@ -39,4 +39,8 @@ socket.on('connect', function () {
         console.log("updating");
         gameManager.update(json);
     });
+
+    socket.on("heartbeat", function(date){
+        socket.emit("callback", date);
+    });
 });
