@@ -1,4 +1,4 @@
-import { createObject, categoryEnum } from "./global.js";
+import { createObject, categoryEnum, FPS } from "./global.js";
 import Player from "./objects/player.js";
 
 class GameManager{
@@ -18,7 +18,7 @@ class GameManager{
         this.engine=Matter.Engine.create(); 
         this.engine.gravity.y=0.5;
       
-        this.runner= Matter.Runner.create(); 
+        //this.runner= Matter.Runner.create({ isFixed: true }); 
         this.render = Matter.Render.create({
           element: this.canvasContainer,
           engine: this.engine,
@@ -47,7 +47,12 @@ class GameManager{
         });
 
         Matter.Render.run(this.render);
-        Matter.Runner.run(this.runner, this.engine);
+        //Matter.Runner.run(this.runner, this.engine);
+
+
+        this.runInterval = setInterval(() => {
+          Matter.Engine.update(this.engine, 1000 / FPS); 
+        }, 1000 / FPS);
 
         Matter.Events.on(this.engine, 'collisionStart', (event) => {
             event.pairs.forEach(pair => {
@@ -75,7 +80,6 @@ class GameManager{
     }
 
     sendPlayerOrder(order){
-        console.log("sending player order");
         let player=null;
         let playerFound=false;
         let i=0;
@@ -92,16 +96,22 @@ class GameManager{
         }
     }
 
-    update(json){
+    synchronize(json){
+      console.log("sync");
+      const delta=5;
+
+      /*
       for(let i=0; i<json.movingObjects.length; i++){
         let data=json.movingObjects[i];
         let movingObject=this.movingObjects[i];
-        movingObject.applyData(data);
+        //movingObject.applyData(data);
       }
+      */
 
       for(let i=0; i<json.players.length; i++){
         let data=json.players[i];
         let player=this.players[i];
+
         player.applyData(data);
       }
     }

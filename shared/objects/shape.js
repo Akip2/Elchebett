@@ -65,6 +65,14 @@ class Shape{
         return this.body.position;
     }
 
+    getAngle(){
+        return this.body.angle;
+    }
+
+    getAngularVelocity(){
+        return this.body.angularVelocity;
+    }
+
     getVelocity(){
         return this.body.velocity;
     }
@@ -86,8 +94,10 @@ class Shape{
     getBodyData(){
         return {
             position: this.getPosition(),
-            angle: this.body.angle,
             velocity: this.getVelocity(),
+
+            angle: this.getAngle(),
+            angularVelocity: this.getAngularVelocity()
         }
     }
 
@@ -95,6 +105,34 @@ class Shape{
         this.place(data.position.x, data.position.y);
         Body.setVelocity(this.body, data.velocity);
         Body.setAngle(this.body, data.angle);
+    }
+
+    compare(data){
+        let positionDist = Math.sqrt(
+            (this.getPosition().x - data.position.x)**2
+            +
+            (this.getPosition().y - data.position.y)**2
+        );
+
+        let velocityDist = Math.sqrt(
+            (this.getVelocity().x - data.velocity.x)**2
+            +
+            (this.getVelocity().y - data.velocity.y)**2
+        );
+
+        let angleDist = Math.sqrt((this.getAngle() - data.angle)**2)
+
+        let angularVelocityDist = Math.sqrt((this.getAngularVelocity() - data.angularVelocity)**2)
+
+        /*
+        console.log("SERVER : "+data.position.x+" ; "+data.position.y);
+        console.log("CLIENT : "+this.getPosition().x+" ; "+this.getPosition().y);
+        */
+
+        let dif = positionDist + velocityDist + angleDist + angularVelocityDist;
+
+        //this.applyData(data);
+        return dif;
     }
 }
 

@@ -44,6 +44,8 @@ const categoryEnum=Object.freeze({
     GROUND: 0x0004
 });
 
+const FPS = 30;
+
 function createObject(json){
     let res;
 
@@ -71,5 +73,6 @@ export{
     height,
     positionEnum,
     categoryEnum,
+    FPS,
     createObject
 }

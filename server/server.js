@@ -107,8 +107,15 @@ io.sockets.on('connection', function (socket) {
         let index = getPlayerPartyIndex(socket);
         let party = parties[index];
 
-        let latency = (Date.now() - date) / 2
+        let latency = (Date.now() - date);
         party.setLatency(socket.id, latency);
+    });
+
+    socket.on("upda", function(){
+        let index = getPlayerPartyIndex(socket);
+        let party = parties[index];
+
+        party.synchronize();
     });
 });
 

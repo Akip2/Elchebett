@@ -1,18 +1,14 @@
 import Matter from "matter-js";
-import { width, height, positionEnum, categoryEnum } from "../shared/global.js";
+import { width, height, positionEnum, categoryEnum, FPS } from "../shared/global.js";
 import { createObject } from "../shared/global.js";
 
-const Engine = Matter.Engine,
-    Composite = Matter.Composite;
+const Engine = Matter.Engine
 
 var engine = Engine.create();
 engine.gravity.y = 0.5;
-engine.gravity.x = 0;
 
 var players=[];
 var objects=[];
-
-var simulation;
 
 /**
  * Class containing all objects, and runs the matter js environment server-side
@@ -70,15 +66,10 @@ class Environment {
               });
             });
           });
-
-          this.updateNumber=0;
-        simulation=setInterval(()=>Engine.update(engine, 1000/60, this.updateNumber*1000), 1);
     }
 
     update(){
-        const currTime = 0.001 * Date.now();
-        this.updateNumber++;
-        this.lastTime = currTime;
+        Engine.update(engine, 1000 / FPS)
         
         this.playerInfos=[];
         this.movingObjects=[];

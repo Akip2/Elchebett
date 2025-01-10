@@ -35,12 +35,11 @@ socket.on('connect', function () {
         gameManager.sendPlayerOrder(order);
     });
 
-    socket.on('update', function(json) {
-        console.log("updating");
-        gameManager.update(json);
-    });
-
     socket.on("heartbeat", function(date){
         socket.emit("callback", date);
+    });
+
+    socket.on("synchro", function(json){
+        gameManager.synchronize(json);
     });
 });

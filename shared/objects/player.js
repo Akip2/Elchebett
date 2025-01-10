@@ -1,6 +1,18 @@
 import Shape from "./shape.js";
 import { Bodies, Body, categoryEnum} from "../global.js";
 
+
+const isServer = typeof window === 'undefined';
+
+var Matter;
+if(isServer){
+    const matterModule=await import('matter-js');
+    Matter = matterModule.default;
+}
+else{
+    Matter=window.Matter;
+}
+
 const maxSpeedX=12;
 const speedX=0.12;
 const jumpForce=-0.03;
@@ -49,16 +61,27 @@ class Player extends Shape{
     move(direction){
         clearInterval(this.horizontalInterval);
 
+        if(isServer){
+            Body.setVelocity(this.body, {x: 10*(10/7)*direction, y: this.body.velocity.y});
+        }
+        else{
+            Body.setVelocity(this.body, {x: 10*direction, y: this.body.velocity.y});
+        }
+        
+        /*
+
         this.horizontalInterval = setInterval(() =>{
             let currentSpeed=this.body.velocity.x+speedX*direction;
             currentSpeed=Math.abs(currentSpeed)>maxSpeedX ? maxSpeedX*direction : currentSpeed;
 
             Body.setVelocity(this.body, {x: currentSpeed, y: this.body.velocity.y});
         }, 10);
+        */
     }
 
     stopMoving(){
-        clearInterval(this.horizontalInterval);
+        //clearInterval(this.horizontalInterval);
+        Body.setVelocity(this.body, {x: 0, y: this.body.velocity.y});
     }
 
     canJump(){
@@ -103,7 +126,7 @@ class Player extends Shape{
 
         newBody.friction=0;
         newBody.frictionStatic=0;
-        newBody.frictionAir=0.015;
+        newBody.frictionAir=0;
         newBody.render.fillStyle=this.color;
         
         this.body=newBody;

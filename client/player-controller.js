@@ -2,6 +2,8 @@ const rightKey="ArrowRight";
 const leftKey="ArrowLeft";
 const jumpKey="ArrowUp";
 
+const synchroKey="a";
+
 class PlayerController{
     constructor(socket){
         this.currentHorizontalKey=null;
@@ -51,6 +53,10 @@ class PlayerController{
                 }
                 else if(keyname==jumpKey){
                     this.sendPlayerOrder(this.createJumpOrder(true));
+                }
+                else{
+                    console.log("upda");
+                    this.socket.emit("upda", 0);
                 }
             }
         });

@@ -1,8 +1,7 @@
 import Environment from "./environment.js";
-//import maps from "./maps.json";
 import { Player } from "../shared/objects/player.js";
-
 import { readFile } from 'fs/promises';
+import { FPS } from "../shared/global.js";
 
 
 const maps = JSON.parse(
@@ -46,11 +45,15 @@ class Party{
     }
 
     sendPlayerOrder(id, order){
-        let player=this.getPlayerById(id);
-        player.executeOrder(order);
-
         order.id=id;
-        this.notifyPlayers("player", order)
+        this.notifyPlayers("player", order);
+
+        let delay = Math.max(this.latencies);
+    
+        setTimeout(() => {
+            let player=this.getPlayerById(id);
+            player.executeOrder(order);
+        }, delay);
     }
 
     getPlayerById(id){
@@ -84,8 +87,6 @@ class Party{
     setLatency(id, latency){
         let index = this.getPlayerIndexById(id);
         this.latencies[index] = latency;
-
-        console.log(this.latencies);
     }
 
     containsPlayer(socket){
@@ -108,13 +109,21 @@ class Party{
         this.env.load(map, this.players);
 
         clearInterval(this.updateInterval);
+        clearInterval(this.pingInterval);
+
         this.notifyPlayers("load", this.env.serialize());
 
-
-        clearInterval(this.pingInterval);
         this.pingInterval = setInterval(() => {
             this.notifyPlayers("heartbeat", Date.now());
-        }, 1);
+        }, 10);
+
+        this.updateInterval=setInterval(()=> {
+           this.env.update();
+        }, 1000 / FPS);
+
+        this.syncInterval=setInterval(()=> {
+            this.synchronize();
+         }, 1800 / FPS);
     }
 
     notifyPlayers(msg, data){
@@ -129,6 +138,11 @@ class Party{
                 socket.emit(msg, data);
             }, delay);
         }
+    }
+
+    synchronize(){
+        //this.env.update();
+        this.notifyPlayers("synchro", this.env.getMovingObjects());
     }
 }
 
